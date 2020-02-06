@@ -6,16 +6,18 @@
 #ifndef EDGE_H
 #define EDGE_H
 
-// forward declaration for class Vertex
+ // forward declaration for class Vertex
 class Vertex;
 
 class Edge {
-  friend class Vertex;
-  friend class Graph;
+    friend class Vertex;
+    friend class Graph;
 
- private:
-  /** constructor with label and weight */
-   Edge(Vertex *From, Vertex *To, int Weight);
+private:
+    Vertex* Finish;
+    int EdgeWeight;
+    /** constructor with label and weight */
+    Edge(Vertex *To, int Weight);
 
 };
 

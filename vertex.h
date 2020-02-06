@@ -20,18 +20,21 @@
 using namespace std;
 
 class Vertex {
-  friend class Graph;
-  friend class Edge;
-  friend ostream &operator<<(ostream &Os, const Vertex &V);
+    friend class Graph;
+    friend class Edge;
+    friend ostream &operator<<(ostream &Os, const Vertex &V);
 
 public:
-  /** Creates an unvisited vertex, gives it a label, and clears its
-      adjacency list.
-      NOTE: A vertex must have a unique label that cannot be changed. */
-  explicit Vertex(const string &Label);
-
-  /** Destructor. Delete all edges from this vertex to other vertices */
-  ~Vertex();
+    /** Creates an unvisited vertex, gives it a label, and clears its
+        adjacency list.
+        NOTE: A vertex must have a unique label that cannot be changed. */
+    explicit Vertex(const string &Label);
+    string getVertexName();
+    /** Destructor. Delete all edges from this vertex to other vertices */
+    ~Vertex();
+private:
+    string VertexName;
+    vector<string> Neighbors;
 
 };
 

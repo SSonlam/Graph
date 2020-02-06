@@ -15,7 +15,14 @@
 
 using namespace std;
 
-ostream &operator<<(ostream &Os, const Vertex &V) { return Os; }
-Vertex::Vertex(const string &Label) {}
-
+ostream &operator<<(ostream &Os, const Vertex &V) { 
+    Os << V.VertexName;
+    return Os; 
+}
+Vertex::Vertex(const string &Label) {
+    VertexName = Label;
+}
+string Vertex::getVertexName() {
+    return VertexName;
+}
 Vertex::~Vertex() {}
