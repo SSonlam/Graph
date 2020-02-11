@@ -29,6 +29,9 @@ Graph::~Graph() {
     for (int I = 0; I < VertexVector.size(); I++) {
         delete VertexVector[I];
     }
+    for (int I = 0; I < EdgeVector.size(); I++) {
+        delete EdgeVector[I];
+    }
 }
 
 //read in file with expected formatting
