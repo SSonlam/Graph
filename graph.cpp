@@ -352,22 +352,6 @@ void Graph::selectionSortVertex() {
         }
     }
 }
-
-void Graph::selectionSortEdge() {
-    int I, J, Min;
-    Edge* Temp;
-    for (I = 0; I < EdgeVector.size(); I++) {
-        Min = I;
-        for (J = I + 1; J < EdgeVector.size(); J++) {
-            if (EdgeVector[J]->Finish->VertexName < EdgeVector[Min]->Finish->VertexName) {
-                Min = J;
-            }
-            Temp = EdgeVector[I];
-            EdgeVector[I] = EdgeVector[Min];
-            EdgeVector[Min] = Temp;
-        }
-    }
-}
 /*
 void Graph::primMST() {
     map<Vertex*, Vertex*> A;

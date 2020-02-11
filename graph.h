@@ -91,18 +91,10 @@ public:
     void printMST(int parent[]);
   //  void primMST(const string &StartLabel);
     void selectionSortVertex();
-    void selectionSortEdge();
-   // bool createsMST(const string &StartLabel, void Visit(const string &From, const string &To,
-     //   int Weight));
-    void printMinSpanningTree();
     /*
     int mst(const string &StartLabel,
         void Visit(const string &From, const string &To, int Weight)) const;
         */
-    bool getDirectional() {
-        return DirectionalEdges;
-
-    }
 private:
     // default is directional edges is true,
     // can only be modified when graph is initially created
