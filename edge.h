@@ -5,6 +5,7 @@
  */
 #ifndef EDGE_H
 #define EDGE_H
+#include <string>
 
  // forward declaration for class Vertex
 class Vertex;

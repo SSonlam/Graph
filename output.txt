@@ -1,240 +1,152 @@
 ===================================================================
 Recommended Usage: ./simplecompile.sh > output.txt 2>&1
 ===================================================================
-Wed Dec 25 09:55:07 PST 2019
-Linux csslab1.uwb.edu 3.10.0-1062.1.1.el7.x86_64 #1 SMP Fri Sep 13 22:55:44 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
-uid=870540(pisan) gid=2120870540(pisan) groups=2120870540(pisan),579804(faculty)
+Mon Feb 10 23:31:00 PST 2020
+Linux uw1-320-07 4.9.0-9-amd64 #1 SMP Debian 4.9.168-1+deb9u5 (2019-08-11) x86_64 GNU/Linux
+uid=863755(ssonlam) gid=2120863755(ssonlam) groups=2120863755(ssonlam),605559(lab-access)
 ===================================================================
 *** compiling with clang++ to create an executable called myprogram
 ===================================================================
-clang version 7.0.1 (tags/RELEASE_701/final)
-Target: x86_64-unknown-linux-gnu
+clang version 3.8.1-24 (tags/RELEASE_381/final)
+Target: x86_64-pc-linux-gnu
 Thread model: posix
-InstalledDir: /opt/rh/llvm-toolset-7.0/root/usr/bin
-edge.cpp:9:20: warning: unused parameter 'From' [-Wunused-parameter]
-Edge::Edge(Vertex *From, Vertex *To, int Weight) {}
-                   ^
-edge.cpp:9:34: warning: unused parameter 'To' [-Wunused-parameter]
-Edge::Edge(Vertex *From, Vertex *To, int Weight) {}
-                                 ^
-edge.cpp:9:42: warning: unused parameter 'Weight' [-Wunused-parameter]
-Edge::Edge(Vertex *From, Vertex *To, int Weight) {}
-                                         ^
-3 warnings generated.
-graph.cpp:9:19: warning: unused parameter 'DirectionalEdges' [-Wunused-parameter]
-Graph::Graph(bool DirectionalEdges) {}
-                  ^
-graph.cpp:13:36: warning: unused parameter 'Filename' [-Wunused-parameter]
-bool Graph::readFile(const string &Filename) { return true; }
-                                   ^
-graph.cpp:19:40: warning: unused parameter 'Label' [-Wunused-parameter]
-int Graph::neighborsSize(const string &Label) const { return 0; }
-                                       ^
-graph.cpp:21:31: warning: unused parameter 'Label' [-Wunused-parameter]
-bool Graph::add(const string &Label) { return false; }
-                              ^
-graph.cpp:24:41: warning: unused parameter 'Label' [-Wunused-parameter]
-bool Graph::contains(const std::string &Label) const { return false; }
-                                        ^
-graph.cpp:26:46: warning: unused parameter 'Label' [-Wunused-parameter]
-string Graph::getEdgesAsString(const string &Label) const { return ""; }
-                                             ^
-graph.cpp:28:35: warning: unused parameter 'From' [-Wunused-parameter]
-bool Graph::connect(const string &From, const string &To, int Weight) {
-                                  ^
-graph.cpp:28:55: warning: unused parameter 'To' [-Wunused-parameter]
-bool Graph::connect(const string &From, const string &To, int Weight) {
-                                                      ^
-graph.cpp:28:63: warning: unused parameter 'Weight' [-Wunused-parameter]
-bool Graph::connect(const string &From, const string &To, int Weight) {
-                                                              ^
-graph.cpp:32:38: warning: unused parameter 'From' [-Wunused-parameter]
-bool Graph::disconnect(const string &From, const string &To) { return true; }
-                                     ^
-graph.cpp:32:58: warning: unused parameter 'To' [-Wunused-parameter]
-bool Graph::disconnect(const string &From, const string &To) { return true; }
-                                                         ^
-graph.cpp:34:31: warning: unused parameter 'StartLabel' [-Wunused-parameter]
-void Graph::dfs(const string &StartLabel, void Visit(const string &Label)) {}
-                              ^
-graph.cpp:34:48: warning: unused parameter 'Visit' [-Wunused-parameter]
-void Graph::dfs(const string &StartLabel, void Visit(const string &Label)) {}
-                                               ^
-graph.cpp:36:31: warning: unused parameter 'StartLabel' [-Wunused-parameter]
-void Graph::bfs(const string &StartLabel, void Visit(const string &Label)) {}
-                              ^
-graph.cpp:36:48: warning: unused parameter 'Visit' [-Wunused-parameter]
-void Graph::bfs(const string &StartLabel, void Visit(const string &Label)) {}
-                                               ^
-graph.cpp:41:31: warning: unused parameter 'StartLabel' [-Wunused-parameter]
-Graph::dijkstra(const string &StartLabel) const {
-                              ^
-graph.cpp:52:30: warning: unused parameter 'StartLabel' [-Wunused-parameter]
-int Graph::mst(const string &StartLabel,
-                             ^
-graph.cpp:53:21: warning: unused parameter 'Visit' [-Wunused-parameter]
-               void Visit(const string &From, const string &To,
-                    ^
-18 warnings generated.
-vertex.cpp:19:48: warning: unused parameter 'V' [-Wunused-parameter]
-ostream &operator<<(ostream &Os, const Vertex &V) {
-                                               ^
-vertex.cpp:22:30: warning: unused parameter 'Label' [-Wunused-parameter]
-Vertex::Vertex(const string &Label) {}
-                             ^
-2 warnings generated.
+InstalledDir: /usr/bin
 ===================================================================
 *** running myprogram
-myprogram: graphtest.cpp:51: void testGraphBasic(): Assertion `G.add("a") && "add vertex a"' failed.
-./simplecompile.sh: line 45: 16205 Aborted                 ./myprogram
+testGraph0DFS
+testGraph0BFS
+testGraph0Dijkstra
+this is tester1Dijkstra(A) weights is [B:1][C:4]
+Dijkstra(A) previous is [B:A][C:B]
+testGraph1
+Done!
 ===================================================================
 *** running clang-tidy using options from .clang-tidy
+*** fix all warnings, modify .clang-tidy if necessary
+*** explain all changes to .clang-tidy in README
 LLVM (http://llvm.org/):
-  LLVM version 7.0.1
+  LLVM version 3.8.1
+  
   Optimized build.
-  Default target: x86_64-unknown-linux-gnu
-  Host CPU: broadwell
-12502 warnings generated.
-26626 warnings generated.
-37120 warnings generated.
-47543 warnings generated.
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:9:1: warning: constructor does not initialize these fields: DirectionalEdges [hicpp-member-init]
-Graph::Graph(bool DirectionalEdges) {}
+  Built Jun  2 2017 (13:11:29).
+  Default target: x86_64-pc-linux-gnu
+  Host CPU: ivybridge
+7077 warnings generated.
+27413 warnings generated.
+42971 warnings generated.
+53474 warnings generated.
+63637 warnings generated.
+/home/NETID/ssonlam/graph.cpp:20:5: warning: use range-based for loop instead [modernize-loop-convert]
+    for (int I = 0; I < ALPHABETSIZE; I++) {
+    ^
+/home/NETID/ssonlam/graph.cpp:29:5: warning: use range-based for loop instead [modernize-loop-convert]
+    for (int I = 0; I < VertexVector.size(); I++) {
+    ^
+/home/NETID/ssonlam/graph.cpp:32:5: warning: use range-based for loop instead [modernize-loop-convert]
+    for (int I = 0; I < EdgeVector.size(); I++) {
+    ^
+/home/NETID/ssonlam/graph.cpp:53:39: warning: redundant boolean literal supplied to boolean operator [readability-simplify-boolean-expr]
+        if (this->DirectionalEdges == false) {
+                                      ^
+            !this->DirectionalEdges
+/home/NETID/ssonlam/graph.cpp:71:5: warning: use range-based for loop instead [modernize-loop-convert]
+    for (int I = 0; I < ALPHABETSIZE; I++) {
+    ^
+/home/NETID/ssonlam/graph.cpp:106:16: warning: redundant boolean literal in conditional return statement [readability-simplify-boolean-expr]
+        return false;
+               ^
+/home/NETID/ssonlam/graph.cpp:154:9: warning: use auto when initializing with new to avoid duplicating the type name [modernize-use-auto]
+        Edge* EdgeAdded = new Edge(VertexMap[To], Weight);
+        ^
+        auto 
+/home/NETID/ssonlam/graph.cpp:175:35: warning: redundant boolean literal supplied to boolean operator [readability-simplify-boolean-expr]
+    if (this->DirectionalEdges == false) {
+                                  ^
+        !this->DirectionalEdges
+/home/NETID/ssonlam/graph.cpp:214:9: warning: use range-based for loop instead [modernize-loop-convert]
+        for (int I = 0; I < Temp->Neighbors.size(); I++) {
+        ^
+note: this fix will not be applied because it overlaps with another fix
+/home/NETID/ssonlam/graph.cpp:215:50: warning: redundant boolean literal supplied to boolean operator [readability-simplify-boolean-expr]
+            if (Temp->Neighbors[I]->IsVisited == false) {
+                                                 ^
+                !Temp->Neighbors[I]->IsVisited
+/home/NETID/ssonlam/graph.cpp:223:13: warning: use range-based for loop instead [modernize-loop-convert]
+            for (int I = 0; I < Temp->Neighbors.size(); I++) {
+            ^
+note: this fix will not be applied because it overlaps with another fix
+/home/NETID/ssonlam/graph.cpp:224:54: warning: redundant boolean literal supplied to boolean operator [readability-simplify-boolean-expr]
+                if (Temp->Neighbors[I]->IsVisited == false) {
+                                                     ^
+                    !Temp->Neighbors[I]->IsVisited
+/home/NETID/ssonlam/graph.cpp:248:9: warning: use range-based for loop instead [modernize-loop-convert]
+        for (int I = 0; I < Temp->Neighbors.size(); I++) {
+        ^
+note: this fix will not be applied because it overlaps with another fix
+/home/NETID/ssonlam/graph.cpp:249:50: warning: redundant boolean literal supplied to boolean operator [readability-simplify-boolean-expr]
+            if (Temp->Neighbors[I]->IsVisited == false) {
+                                                 ^
+                !Temp->Neighbors[I]->IsVisited
+/home/NETID/ssonlam/graph.cpp:259:5: warning: use range-based for loop instead [modernize-loop-convert]
+    for (int I = 0; I < VertexVector.size(); I++) {
+    ^
+/home/NETID/ssonlam/graph.cpp:270:26: warning: redundant boolean literal supplied to boolean operator [readability-simplify-boolean-expr]
+        if (SptSet[V] == false && Distance[V] <= Minimum) {
+                         ^
+            !SptSet[V]
+/home/NETID/ssonlam/graph.cpp:285:26: warning: redundant boolean literal supplied to boolean operator [readability-simplify-boolean-expr]
+        if (SptSet[V] == false && Distance[V] < Minimum) {
+                         ^
+            !SptSet[V]
+/home/NETID/ssonlam/graph.cpp:330:31: warning: implicit cast 'int' -> bool [readability-implicit-bool-cast]
+            if (!SptSet[V] && AdjMatrix[U][V] && Distance[U] != INT_MAX
+                              ^
+                              (               != 0)
+/home/NETID/ssonlam/graph.h:76:9: warning: function 'Graph::minDistance' has a definition with different parameter names [readability-inconsistent-declaration-parameter-name]
+    int minDistance(int Dist[], bool SptSet[]);
+        ^
+                        Distance
+/home/NETID/ssonlam/graph.cpp:263:12: note: the definition seen here
+int Graph::minDistance(int Distance[], bool SptSet[])
+           ^
+/home/NETID/ssonlam/graph.h:76:9: note: differing parameters are named here: ('Dist'), in definition: ('Distance')
+    int minDistance(int Dist[], bool SptSet[]);
+        ^
+/home/NETID/ssonlam/graph.h:91:23: warning: invalid case style for parameter 'parent' [readability-identifier-naming]
+    void printMST(int parent[]);
+                      ^
+                      Parent
+/home/NETID/ssonlam/graph.h:91:23: warning: invalid case style for parameter 'parent' [readability-identifier-naming]
+    void printMST(int parent[]);
+                      ^
+                      Parent
+/home/NETID/ssonlam/vertex.cpp:44:1: warning: use '= default' to define a trivial destructor [modernize-use-default]
+Vertex::~Vertex(){}
 ^
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:11:8: warning: use '= default' to define a trivial destructor [hicpp-use-equals-default]
-Graph::~Graph() {}
-       ^        ~~
-                = default;
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:13:36: warning: parameter 'Filename' is unused [misc-unused-parameters]
-bool Graph::readFile(const string &Filename) { return true; }
-                                   ^~~~~~~~~
-                                    /*Filename*/
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:19:40: warning: parameter 'Label' is unused [misc-unused-parameters]
-int Graph::neighborsSize(const string &Label) const { return 0; }
-                                       ^~~~~~
-                                        /*Label*/
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:21:31: warning: parameter 'Label' is unused [misc-unused-parameters]
-bool Graph::add(const string &Label) { return false; }
-                              ^~~~~~
-                               /*Label*/
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:24:41: warning: parameter 'Label' is unused [misc-unused-parameters]
-bool Graph::contains(const std::string &Label) const { return false; }
-                                        ^~~~~~
-                                         /*Label*/
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:26:46: warning: parameter 'Label' is unused [misc-unused-parameters]
-string Graph::getEdgesAsString(const string &Label) const { return ""; }
-                                             ^~~~~~
-                                              /*Label*/
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:28:35: warning: parameter 'From' is unused [misc-unused-parameters]
-bool Graph::connect(const string &From, const string &To, int Weight) {
-                                  ^~~~~
-                                   /*From*/
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:28:55: warning: parameter 'To' is unused [misc-unused-parameters]
-bool Graph::connect(const string &From, const string &To, int Weight) {
-                                                      ^~~
-                                                       /*To*/
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:28:63: warning: parameter 'Weight' is unused [misc-unused-parameters]
-bool Graph::connect(const string &From, const string &To, int Weight) {
-                                                              ^~~~~~~
-                                                               /*Weight*/
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:32:38: warning: parameter 'From' is unused [misc-unused-parameters]
-bool Graph::disconnect(const string &From, const string &To) { return true; }
-                                     ^~~~~
-                                      /*From*/
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:32:58: warning: parameter 'To' is unused [misc-unused-parameters]
-bool Graph::disconnect(const string &From, const string &To) { return true; }
-                                                         ^~~
-                                                          /*To*/
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:41:31: warning: parameter 'StartLabel' is unused [misc-unused-parameters]
-Graph::dijkstra(const string &StartLabel) const {
-                              ^~~~~~~~~~~
-                               /*StartLabel*/
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:52:30: warning: parameter 'StartLabel' is unused [misc-unused-parameters]
-int Graph::mst(const string &StartLabel,
-                             ^~~~~~~~~~~
-                              /*StartLabel*/
-/home/NETID/pisan/tmp/ass3-graph-starter/graph.cpp:53:21: warning: parameter 'Visit' is unused [misc-unused-parameters]
-               void Visit(const string &From, const string &To,
-                    ^~~~~~
-                     /*Visit*/
-/home/NETID/pisan/tmp/ass3-graph-starter/vertex.cpp:19:48: warning: parameter 'V' is unused [misc-unused-parameters]
-ostream &operator<<(ostream &Os, const Vertex &V) {
-                                               ^~
-                                                /*V*/
-/home/NETID/pisan/tmp/ass3-graph-starter/vertex.cpp:24:9: warning: use '= default' to define a trivial destructor [hicpp-use-equals-default]
-Vertex::~Vertex() {}
-        ^         ~~
-                  = default;
-Suppressed 47524 warnings (47523 in non-user code, 1 NOLINT).
-Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+                 = default;
+Suppressed 63615 warnings (63615 in non-user code).
+Use -header-filter=.* to display errors from all non-system headers.
 ===================================================================
-*** running clang-format format formatting suggestions
-*** formatting suggestions for edge.cpp
-*** formatting suggestions for graph.cpp
-58,59d57
-< 
-< 
-*** formatting suggestions for graphtest.cpp
-*** formatting suggestions for main.cpp
-17d16
-< 
-*** formatting suggestions for vertex.cpp
-12d11
-< #include "edge.h"
-13a13
-> #include "edge.h"
-16d15
-< 
-19,21c18
-< ostream &operator<<(ostream &Os, const Vertex &V) {
-<   return Os;
-< }
----
-> ostream &operator<<(ostream &Os, const Vertex &V) { return Os; }
+*** ERROR clang-format is not available on this system
 ===================================================================
 *** running valgrind to detect memory leaks
-*** Examine "definitely lost" 
-==16314== Memcheck, a memory error detector
-==16314== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==16314== Using Valgrind-3.14.0 and LibVEX; rerun with -h for copyright info
-==16314== Command: ./myprogram
-==16314== 
-myprogram: graphtest.cpp:51: void testGraphBasic(): Assertion `G.add("a") && "add vertex a"' failed.
-==16314== 
-==16314== Process terminating with default action of signal 6 (SIGABRT)
-==16314==    at 0x568C337: raise (in /usr/lib64/libc-2.17.so)
-==16314==    by 0x568DA27: abort (in /usr/lib64/libc-2.17.so)
-==16314==    by 0x5685155: __assert_fail_base (in /usr/lib64/libc-2.17.so)
-==16314==    by 0x5685201: __assert_fail (in /usr/lib64/libc-2.17.so)
-==16314==    by 0x40356A: testGraphBasic() (graphtest.cpp:51)
-==16314==    by 0x408228: testAll() (graphtest.cpp:248)
-==16314==    by 0x409BB3: main (main.cpp:13)
-==16314== 
-==16314== HEAP SUMMARY:
-==16314==     in use at exit: 26 bytes in 1 blocks
-==16314==   total heap usage: 4 allocs, 3 frees, 528 bytes allocated
-==16314== 
-==16314== LEAK SUMMARY:
-==16314==    definitely lost: 0 bytes in 0 blocks
-==16314==    indirectly lost: 0 bytes in 0 blocks
-==16314==      possibly lost: 0 bytes in 0 blocks
-==16314==    still reachable: 26 bytes in 1 blocks
-==16314==                       of which reachable via heuristic:
-==16314==                         stdstring          : 26 bytes in 1 blocks
-==16314==         suppressed: 0 bytes in 0 blocks
-==16314== Rerun with --leak-check=full to see details of leaked memory
-==16314== 
-==16314== For counts of detected and suppressed errors, rerun with: -v
-==16314== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-./simplecompile.sh: line 79: 16314 Aborted                 valgrind ./myprogram
+==2903==     in use at exit: 0 bytes in 0 blocks
 ===================================================================
 *** compiling with clang++ to checking for memory leaks
 ===================================================================
 *** running myprogram with memory checking
-myprogram: graphtest.cpp:51: void testGraphBasic(): Assertion `G.add("a") && "add vertex a"' failed.
-./simplecompile.sh: line 91: 16328 Aborted                 ASAN_OPTIONS=detect_leaks=1 ./myprogram
+testGraph0DFS
+testGraph0BFS
+testGraph0Dijkstra
+this is tester1Dijkstra(A) weights is [B:1][C:4]
+Dijkstra(A) previous is [B:A][C:B]
+testGraph1
+Done!
 ===================================================================
-*** cleaning up, deleting myprogram
+*** using --analyze option for clang++ to detect issues
 ===================================================================
-Wed Dec 25 09:55:30 PST 2019
+*** cleaning up, deleting myprogram, myprogram.dSYM and core
 ===================================================================
+Mon Feb 10 23:31:17 PST 2020
+===================================================================
+./simplecompile.sh exiting with 0

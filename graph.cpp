@@ -1,107 +1,121 @@
 #include "graph.h"
 #include <algorithm>
 #include <cassert>
-#include <map>
-#include <utility>
-#include <iostream>
-#include <sstream>
+#include <climits>
 #include <fstream>
+#include <iostream>
+#include <map>
+#include <queue>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <utility>
+
 
 using namespace std;
 
 Graph::Graph(bool DirectionalEdges) {
-    for (int i = 0; i < AlphabetSize; i++) {
-        for (int j = 0; j < AlphabetSize; j++) {
-            AdjMatrix[i][j] = -1;
+    //Adjacency matrix for edges
+    this->DirectionalEdges = DirectionalEdges;
+    for (int I = 0; I < ALPHABETSIZE; I++) {
+        for (int J = 0; J < ALPHABETSIZE; J++) {
+            AdjMatrix[I][J] = -1;
         }
     }
 }
 
+//destructor
 Graph::~Graph() {
-    for (int i = 0; i < VertexVector.size(); i++) {
-        delete VertexVector[i];
+    for (int I = 0; I < VertexVector.size(); I++) {
+        delete VertexVector[I];
     }
 }
 
+//read in file with expected formatting
 bool Graph::readFile(const string &Filename) {
-    ifstream inFile;
-    inFile.open(Filename);
-    if (!inFile) {
+    ifstream InFile;
+    InFile.open(Filename);
+    if (!InFile) {
         cout << "Failure opening file";
     }
-    int x;
-    inFile >> x;
-    string first, second;
-    int third;
-    for (int i = 0; i < x; i++) {
-        inFile >> first >> second >> third;
-        add(first);
-        add(second);
-        connect(first, second, third);
+    int X;
+    InFile >> X;
+    string First, Second;
+    int Third;
+    for (int I = 0; I < X; I++) {
+        InFile >> First >> Second >> Third;
+        add(First);
+        add(Second);
+        connect(First, Second, Third);
+        if (this->DirectionalEdges == false) {
+            connect(Second, First, Third);
+        }
     }
 
-    inFile.close();
-
-
-    return true; 
+    InFile.close();
+    return true;
 
 }
 
-int Graph::verticesSize() const { 
-    return numberOfVertices; 
+//total vertices in graph
+int Graph::verticesSize() const {
+    return NumberOfVertices;
 }
 
-int Graph::edgesSize() const { 
-    int count = 0;
-    for (int i = 0; i < AlphabetSize; i++) {
-        for (int j = 0; j < AlphabetSize; j++) {
-            if (AdjMatrix[i][j] > -1) {
-                count++;
+//returns # of edges in the matrix
+int Graph::edgesSize() const {
+    int Count = 0;
+    for (int I = 0; I < ALPHABETSIZE; I++) {
+        for (int J = 0; J < ALPHABETSIZE; J++) {
+            if (AdjMatrix[I][J] > -1) {
+                Count++;
             }
         }
     }
-    return count;
+    return Count;
 }
 
-int Graph::neighborsSize(const string &Label) { 
+//# of neighbors a vertex has
+int Graph::neighborsSize(const string &Label) {
     if (VertexMap[Label] == nullptr) {
         return -1;
     }
     return VertexMap[Label]->Neighbors.size();
 }
 
+//adds new Vertex and adds to map to keep track of it
+//also adds to Vertex vector
 bool Graph::add(const string &Label) {
     if (contains(Label)) {
         return false;
     }
-        Vertex* AddedVertex = new Vertex(Label);
-        VertexMap[Label] = AddedVertex;
-        VertexVector.push_back(AddedVertex);
-     /*   if (Head == nullptr) {
-            Head = AddedVertex;
-        }
-        */
-        numberOfVertices++;
-        return true;
+    auto AddedVertex = new Vertex(Label);
+    VertexMap[Label] = AddedVertex;
+    VertexVector.push_back(AddedVertex);
+    //increment # of vertices
+    NumberOfVertices++;
+    return true;
 }
 
 /** return true if vertex already in graph */
 bool Graph::contains(const string &Label) {
-    if(VertexMap[Label] == nullptr){
+    if (VertexMap[Label] == nullptr) {
         return false;
     }
     return true;
 
 }
 
-string Graph::getEdgesAsString(const string &Label) { 
+//returns all the neighbors of called vertex, with edge weight
+string Graph::getEdgesAsString(const string &Label) {
+    //has no neighbors
     if (VertexMap[Label]->Neighbors.empty()) {
         return "";
     }
     string EdgeAsString;
-    for (int i = 0; i < VertexMap[Label]->Neighbors.size(); i++) {
-      //  Vertex* Temp = VertexMap[Label]->Neighbors[i];
-        int Number = AdjMatrix[getAlphabetInt(Label)][getAlphabetInt(VertexMap[Label]->Neighbors[i])];
+    for (int I = 0; I < VertexMap[Label]->Neighbors.size(); I++) {
+        int Number = AdjMatrix[getAlphabetInt(Label)]
+            [getAlphabetInt(VertexMap[Label]->Neighbors[I]->VertexName)];
 
         //getting our edge to convert to string
         string IntToString;
@@ -109,87 +123,285 @@ string Graph::getEdgesAsString(const string &Label) {
         SS << Number;
         IntToString = SS.str();
 
-        EdgeAsString += VertexMap[Label]->Neighbors[i] + "(" + IntToString + ")";
-        if (i != VertexMap[Label]->Neighbors.size() - 1) {
+        EdgeAsString += VertexMap[Label]->Neighbors[I]->VertexName +
+            "(" + IntToString + ")";
+        if (I != VertexMap[Label]->Neighbors.size() - 1) {
             EdgeAsString += ",";
         }
     }
-    return EdgeAsString; 
+    return EdgeAsString;
 }
 
+//connecting adds a Weight to adj matrix, creates edge, adds to
+//vertex neighbors as well
 bool Graph::connect(const string &From, const string &To, int Weight) {
+    //self loop check
     if (VertexMap[From] == VertexMap[To]) {
         return false;
     }
-    else if (VertexMap[From] == nullptr || VertexMap[To] == nullptr) {
+    //connection to empty vertex
+    if (VertexMap[From] == nullptr || VertexMap[To] == nullptr) {
         return false;
     }
-    if (AdjMatrix[getAlphabetInt(From)][getAlphabetInt(To)] == -1) {
-        Edge EdgeConnect(VertexMap[To], Weight);
-       // EdgeVector.push_back(&EdgeConnect);
-        VertexMap[From]->Neighbors.push_back(To);
-        sort(VertexMap[From]->Neighbors.begin(), VertexMap[From]->Neighbors.end());
 
+    if (AdjMatrix[getAlphabetInt(From)][getAlphabetInt(To)] == -1) {
+        VertexMap[From]->Neighbors.push_back(VertexMap[To]);
+        VertexMap[From]->selectionSort();
         AdjMatrix[getAlphabetInt(From)][getAlphabetInt(To)] = Weight;
+        Edge* EdgeAdded = new Edge(VertexMap[To], Weight);
+        EdgeVector.push_back(EdgeAdded);
         return true;
     }
     return false;
 }
-bool Graph::disconnect(const string &From, const string &To) { 
+
+//disconnect sets adj matrix edge back to -1
+bool Graph::disconnect(const string &From, const string &To) {
     if (AdjMatrix[getAlphabetInt(From)][getAlphabetInt(To)] == -1) {
         return false;
     }
     AdjMatrix[getAlphabetInt(From)][getAlphabetInt(To)] = -1;
-    /*
-    for (int i = 0; i < EdgeVector.size(); i++) {
-        if (EdgeVector[i]->Finish->VertexName == To) {
-            EdgeVector.erase(EdgeVector.begin() + i);
+    //also take away from Vertex neighbor vector
+    for (int I = 0; I < VertexMap[From]->Neighbors.size(); I++) {
+        if (VertexMap[To] == VertexMap[From]->Neighbors[I]) {
+            VertexMap[From]->Neighbors.erase(VertexMap[From]->Neighbors.begin() + I);
         }
     }
-    */
-    for (int i = 0; i < VertexMap[From]->Neighbors.size(); i++) {
-        if (To == VertexMap[From]->Neighbors[i]) {
-            VertexMap[From]->Neighbors.erase(VertexMap[From]->Neighbors.begin() + i);
+
+    //undirected graph will disconnect both edges
+    if (this->DirectionalEdges == false) {
+        AdjMatrix[getAlphabetInt(To)][getAlphabetInt(From)] = -1;
+        for (int I = 0; I < VertexMap[To]->Neighbors.size(); I++) {
+            if (VertexMap[From] == VertexMap[To]->Neighbors[I]) {
+                VertexMap[To]->Neighbors.erase(VertexMap[To]->Neighbors.begin() + I);
+            }
         }
     }
-    return true; 
+    return true;
 }
 
+//matches string with int for adj matrix
 int Graph::getAlphabetInt(const string Target) {
-    for (int i = 0; i < AlphabetSize; i++) {
-        if (Target == Alphabet[i]) {
-            return i;
+    for (int I = 0; I < ALPHABETSIZE; I++) {
+        if (Target == Alphabet[I]) {
+            return I;
         }
     }
-    for (int i = 0; i < AlphabetSize; i++) {
-        if (Target == AlphabetLowerCase[i]) {
-            return i;
+    for (int I = 0; I < ALPHABETSIZE; I++) {
+        if (Target == AlphabetLowerCase[I]) {
+            return I;
         }
     }
     return -1;
 }
 
-void Graph::dfs(const string &StartLabel, void Visit(const string &Label)) {}
+void Graph::dfs(const string &StartLabel, void Visit(const string &Label)) {
+    if (VertexMap[StartLabel] == nullptr) {
+        return;
+    }
+    stack<Vertex*> Stack;
+    visitedToFalse();
+    Stack.push(VertexMap[StartLabel]);
+    Visit(StartLabel);
+    VertexMap[StartLabel]->IsVisited = true;
 
-void Graph::bfs(const string &StartLabel, void Visit(const string &Label)) {}
+    while (!Stack.empty()) {
+        Vertex* Temp = Stack.top();
+        bool VisitCheck = true;
+        for (int I = 0; I < Temp->Neighbors.size(); I++) {
+            if (Temp->Neighbors[I]->IsVisited == false) {
+                VisitCheck = false;
+            }
+        }
+        if (VisitCheck) {
+            Stack.pop();
+        }
+        else {
+            for (int I = 0; I < Temp->Neighbors.size(); I++) {
+                if (Temp->Neighbors[I]->IsVisited == false) {
+                    Stack.push(Temp->Neighbors[I]);
+                    Visit(Temp->Neighbors[I]->VertexName);
+                    Temp->Neighbors[I]->IsVisited = true;
+                    break;
+                }
+            }
+        }
+    }
+}
 
-// store the weights in a map
-// store the previous label in a map
+void Graph::bfs(const string &StartLabel, void Visit(const string &Label)) {
+    if (VertexMap[StartLabel] == nullptr) {
+        return;
+    }
+    visitedToFalse();
+    queue<Vertex*> Queue;
+    Queue.push(VertexMap[StartLabel]);
+    Visit(StartLabel);
+    VertexMap[StartLabel]->IsVisited = true;
+    while (!Queue.empty()) {
+
+        Vertex* Temp = Queue.front();
+        Queue.pop();
+        for (int I = 0; I < Temp->Neighbors.size(); I++) {
+            if (Temp->Neighbors[I]->IsVisited == false) {
+                Queue.push(Temp->Neighbors[I]);
+                Visit(Temp->Neighbors[I]->VertexName);
+                Temp->Neighbors[I]->IsVisited = true;
+            }
+        }
+    }
+}
+
+void Graph::visitedToFalse() {
+    for (int I = 0; I < VertexVector.size(); I++) {
+        VertexVector[I]->IsVisited = false;
+    }
+}
+int Graph::minDistance(int Distance[], bool SptSet[])
+{
+    // Initialize min value 
+    int Minimum = INT_MAX;
+    int MinIndex;
+
+    for (int V = 0; V < ALPHABETSIZE; V++) {
+        if (SptSet[V] == false && Distance[V] <= Minimum) {
+            Minimum = Distance[V], MinIndex = V;
+        }
+    }
+
+    return MinIndex;
+}
+
+int Graph::minDistance2(int Distance[], bool SptSet[])
+{
+    // Initialize min value 
+    int Minimum = INT_MAX;
+    int MinIndex;
+
+    for (int V = 0; V < ALPHABETSIZE; V++) {
+        if (SptSet[V] == false && Distance[V] < Minimum) {
+            Minimum = Distance[V], MinIndex = V;
+        }
+    }
+
+    return MinIndex;
+}
+
+// Function that implements Dijkstra's single source shortest path 
+// algorithm for a graph represented using adjacency matrix 
+// representation 
 pair<map<string, int>, map<string, string>>
-Graph::dijkstra(const string &StartLabel) const {
+Graph::dijkstra(const string &StartLabel)
+{
     map<string, int> Weights;
     map<string, string> Previous;
+    int Distance[ALPHABETSIZE]; // The output array.  dist[i] will hold the shortest 
+    // distance from src to i 
+
+    bool SptSet[ALPHABETSIZE]; // sptSet[i] will be true if vertex i is included in shortest 
+    // path tree or shortest distance from src to i is finalized 
+
+    // Initialize all distances as INFINITE and stpSet[] as false 
+    for (int I = 0; I < ALPHABETSIZE; I++) {
+        Distance[I] = INT_MAX, SptSet[I] = false;
+    }
+
+    // Distance of source vertex from itself is always 0 
+    Distance[getAlphabetInt(StartLabel)] = 0;
+
+    // Find shortest path for all vertices 
+    for (int Count = 0; Count < ALPHABETSIZE - 1; Count++) {
+        // Pick the minimum distance vertex from the set of vertices not 
+        // yet processed. u is always equal to src in the first iteration. 
+        int U = minDistance(Distance, SptSet);
+
+        // Mark the picked vertex as processed 
+        SptSet[U] = true;
+
+        // Update dist value of the adjacent vertices of the picked vertex. 
+        for (int V = 0; V < ALPHABETSIZE; V++) {
+
+            // Update dist[v] only if is not in sptSet, there is an edge from 
+            // u to v, and total weight of path from src to  v through u is 
+            // smaller than current value of dist[v] 
+            if (!SptSet[V] && AdjMatrix[U][V] && Distance[U] != INT_MAX
+                && AdjMatrix[U][V] != -1 && Distance[U] + AdjMatrix[U][V] < Distance[V]) {
+                Distance[V] = Distance[U] + AdjMatrix[U][V];
+                Weights[Alphabet[V]] = Distance[V];
+                Previous[Alphabet[V]] = Alphabet[U];
+            }
+        }
+    }
     return make_pair(Weights, Previous);
 }
 
-/**
- * minimum spanning tree
- * @param function to be called on each edge
- * @return length of the minimum spanning tree or -1 if start vertex not found
- */
-int Graph::mst(const string &StartLabel,
-    void Visit(const string &From, const string &To,
-        int Weight)) const {
-    assert(!DirectionalEdges);
-    return 0;
+void Graph::selectionSortVertex() {
+    int I, J, Min;
+    Vertex* Temp;
+    for (I = 0; I < VertexVector.size(); I++) {
+        Min = I;
+        for (J = I + 1; J < VertexVector.size(); J++) {
+            if (VertexVector[J]->VertexName < VertexVector[Min]->VertexName)
+                Min = J;
+            Temp = VertexVector[I];
+            VertexVector[I] = VertexVector[Min];
+            VertexVector[Min] = Temp;
+        }
+    }
 }
+
+void Graph::selectionSortEdge() {
+    int I, J, Min;
+    Edge* Temp;
+    for (I = 0; I < EdgeVector.size(); I++) {
+        Min = I;
+        for (J = I + 1; J < EdgeVector.size(); J++) {
+            if (EdgeVector[J]->Finish->VertexName < EdgeVector[Min]->Finish->VertexName) {
+                Min = J;
+            }
+            Temp = EdgeVector[I];
+            EdgeVector[I] = EdgeVector[Min];
+            EdgeVector[Min] = Temp;
+        }
+    }
+}
+/*
+void Graph::primMST() {
+    map<Vertex*, Vertex*> A;
+    map<Vertex*, Vertex*> PARENT;
+    map<Vertex*, int> KEY;
+    selectionSortVertex();
+    selectionSortEdge();
+
+    for (auto c : VertexVector) {
+        PARENT[c] = '\0';
+        KEY[c] = INT_MAX;
+    }
+    KEY[VertexMap["A"]] = 0;
+    vector<Vertex*> Q = VertexVector;
+
+
+    while (!Q.empty()) {
+        Vertex* u = Q.front();
+        vector<Vertex*>::iterator itr = remove(Q.begin(), Q.end(), u);
+        Q.erase(itr, Q.end());
+        if (PARENT[u] != '\0') {
+            A[u] = PARENT[u];
+        }
+        vector <pair<string, Edge*> > adj;
+        adj.push_back(make_pair(u->VertexName, EdgeVector.front()));
+        for (pair<string, Edge*> v : adj) {
+            cout << v.second->Finish->VertexName << endl;
+            if (find(Q.begin(), Q.end(), VertexMap[v.first]) != Q.end()) {
+                if (v.second->EdgeWeight < KEY[VertexMap[v.first]]) {
+                    PARENT[VertexMap[v.first]] = u;
+                    KEY[VertexMap[v.first]] = v.second->EdgeWeight;
+                }
+
+            }
+        }
+        
+    }
+    
+}
+*/

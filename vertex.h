@@ -30,11 +30,13 @@ public:
         NOTE: A vertex must have a unique label that cannot be changed. */
     explicit Vertex(const string &Label);
     string getVertexName();
+    void selectionSort();
     /** Destructor. Delete all edges from this vertex to other vertices */
     ~Vertex();
 private:
+    bool IsVisited = false;
     string VertexName;
-    vector<string> Neighbors;
+    vector<Vertex*> Neighbors;
 
 };
 

@@ -15,9 +15,9 @@
 
 using namespace std;
 
-ostream &operator<<(ostream &Os, const Vertex &V) { 
+ostream &operator<<(ostream &Os, const Vertex &V) {
     Os << V.VertexName;
-    return Os; 
+    return Os;
 }
 Vertex::Vertex(const string &Label) {
     VertexName = Label;
@@ -25,4 +25,20 @@ Vertex::Vertex(const string &Label) {
 string Vertex::getVertexName() {
     return VertexName;
 }
-Vertex::~Vertex() {}
+
+void Vertex::selectionSort() {
+    int I, J, Min;
+    Vertex* Temp;
+    for (I = 0; I < Neighbors.size(); I++) {
+        Min = I;
+        for (J = I + 1; J < Neighbors.size(); J++) {
+            if (Neighbors[J]->VertexName < Neighbors[Min]->VertexName)
+                Min = J;
+            Temp = Neighbors[I];
+            Neighbors[I] = Neighbors[Min];
+            Neighbors[Min] = Temp;
+        }
+    }
+}
+
+Vertex::~Vertex(){}

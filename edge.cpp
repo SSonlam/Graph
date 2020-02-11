@@ -5,6 +5,7 @@
  */
 
 #include "edge.h"
+#include <string>
 
 Edge::Edge(Vertex *To, int Weight) {
     Finish = To;
