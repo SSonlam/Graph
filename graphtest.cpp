@@ -1,7 +1,7 @@
 /**
- * Testing BST - Binary Search Tree functions
  *
  * @author Yusuf Pisan
+ * @Modifications by Sonlam Nguyen
  * @date 19 Oct 2019
  */
 
