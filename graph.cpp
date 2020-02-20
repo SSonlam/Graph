@@ -304,35 +304,24 @@ Graph::dijkstra(const string &StartLabel)
 {
     map<string, int> Weights;
     map<string, string> Previous;
-    int Distance[ALPHABETSIZE]; // The output array.  dist[i] will hold the shortest 
-    // distance from src to i 
+    int Distance[ALPHABETSIZE];
 
-    bool SptSet[ALPHABETSIZE]; // sptSet[i] will be true if vertex i is included in shortest 
-    // path tree or shortest distance from src to i is finalized 
+    bool SptSet[ALPHABETSIZE]; 
 
-    // Initialize all distances as INFINITE and stpSet[] as false 
     for (int I = 0; I < ALPHABETSIZE; I++) {
         Distance[I] = INT_MAX, SptSet[I] = false;
     }
 
-    // Distance of source vertex from itself is always 0 
     Distance[getAlphabetInt(StartLabel)] = 0;
 
-    // Find shortest path for all vertices 
     for (int Count = 0; Count < ALPHABETSIZE - 1; Count++) {
-        // Pick the minimum distance vertex from the set of vertices not 
-        // yet processed. u is always equal to src in the first iteration. 
+        
         int U = minDistance(Distance, SptSet);
 
-        // Mark the picked vertex as processed 
         SptSet[U] = true;
 
-        // Update dist value of the adjacent vertices of the picked vertex. 
         for (int V = 0; V < ALPHABETSIZE; V++) {
 
-            // Update dist[v] only if is not in sptSet, there is an edge from 
-            // u to v, and total weight of path from src to  v through u is 
-            // smaller than current value of dist[v] 
             if (!SptSet[V] && AdjMatrix[U][V] && Distance[U] != INT_MAX
                 && AdjMatrix[U][V] != -1 && Distance[U] + AdjMatrix[U][V] < Distance[V]) {
                 Distance[V] = Distance[U] + AdjMatrix[U][V];
