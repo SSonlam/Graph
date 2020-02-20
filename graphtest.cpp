@@ -159,46 +159,6 @@ void testGraph0Dijkstra() {
     assert(map2string(Previous).empty() && "Dijkstra(C) previous");
     
 }
-void testGraph0NotDirected() {
-    cout << "testGraph0NotDirected" << endl;
-    bool IsDirectional = false;
-    Graph G(IsDirectional);
-    if (!G.readFile("graph0.txt")) {
-        return;
-    }
-    Tester::resetSs();
-    G.bfs("A", Tester::labelVisitor);
-    assert(Tester::getSs() == "ABC" && "starting from A");
-
-    Tester::resetSs();
-    G.dfs("B", Tester::labelVisitor);
-    assert(Tester::getSs() == "BAC" && "starting from B");
-
-    Tester::resetSs();
-    G.dfs("C", Tester::labelVisitor);
-    assert(Tester::getSs() == "CAB" && "starting from C");
-
-    Tester::resetSs();
-    G.dfs("X", Tester::labelVisitor);
-    assert(Tester::getSs().empty() && "starting from X");
-
-    map<string, int> Weights;
-    map<string, string> Previous;
-    tie(Weights, Previous) = G.dijkstra("A");
-    // cout << "Dijkstra(A) weights is " << map2string(weights) << endl;
-    assert(map2string(Weights) == "[B:1][C:4]" && "Dijkstra(A) weights");
-    // cout << "Dijkstra(A) previous is " << map2string(previous) << endl;
-    assert(map2string(Previous) == "[B:A][C:B]" && "Dijkstra(A) previous");
-
-    tie(Weights, Previous) = G.dijkstra("B");
-    assert(map2string(Weights) == "[A:1][C:3]" && "Dijkstra(B) weights");
-    assert(map2string(Previous) == "[A:B][C:B]" && "Dijkstra(B) previous");
-
-    tie(Weights, Previous) = G.dijkstra("X");
-    assert(map2string(Weights).empty() && "Dijkstra(C) weights");
-    assert(map2string(Previous).empty() && "Dijkstra(C) previous");
-    Tester::resetSs();
-}
     void testGraph1() {
         cout << "testGraph1" << endl;
         Graph G;
@@ -236,6 +196,5 @@ void testAll() {
     testGraph0DFS();
     testGraph0BFS();
     testGraph0Dijkstra();
-  //  testGraph0NotDirected();
     testGraph1();
 }
